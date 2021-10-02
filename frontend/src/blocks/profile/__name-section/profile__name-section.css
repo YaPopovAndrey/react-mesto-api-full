@@ -1,0 +1,19 @@
+.profile__name-section {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-left: 30px;
+}
+
+@media screen and (max-width: 600px) {
+    .profile__name-section {
+        padding-left: 10px;
+    }
+}
+
+@media screen and (max-width: 449px) {
+    .profile__name-section {
+        padding-left: 0;
+    }
+}

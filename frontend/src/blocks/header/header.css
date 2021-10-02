@@ -1,0 +1,19 @@
+.header {
+    display: block;
+    max-width: 880px;
+    padding-top: 45px;
+    border-bottom: 1px solid rgba(84, 84, 84, .7);
+}
+
+@media screen and (max-width: 940px) {
+    .header {
+        max-width: calc(100% - 60px);
+    }
+}
+
+@media screen and (max-width: 449px) {
+    .header {
+        max-width: 320px;
+        padding-top: 28px;
+    }
+}

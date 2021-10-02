@@ -1,0 +1,34 @@
+.elements__caption {
+    color: #000000;
+    margin: 0;
+    max-width: 198px;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 900;
+    font-style: normal;
+    padding: 25px 0 31px 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 879px) {
+    .elements__caption {
+        max-width: 150px;
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 492px) {
+    .elements__caption {
+        padding: 25px 0 31px 10px;
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .elements__caption {
+        padding: 25px 0 31px 21px;
+        max-width: 198px;
+    }
+}

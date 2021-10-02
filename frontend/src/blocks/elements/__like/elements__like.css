@@ -1,0 +1,33 @@
+.elements__like {
+    background-image: url(../../../images/like.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+    background-size: 19px;
+    min-width: 22px;
+    min-height: 19px;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.elements__like:hover {
+    opacity: 50%;
+    transition: 0.3s;
+}
+
+@media screen and (max-width: 492px) {
+    .elements__like {
+        min-width: 16px;
+        background-size: 16px;
+    }
+}
+
+@media screen and (max-width: 436px) {
+    .elements__like {
+        min-width: 22px;
+        height: 19px;
+        background-size: contain;
+    }
+}

@@ -1,0 +1,14 @@
+.header__logo {
+    object-fit: cover;
+    min-width: 142px;
+    padding-bottom: 40px;
+    display: block;
+}
+
+@media screen and (max-width: 449px) {
+    .header__logo {
+        min-width: 104px;
+        padding-bottom: 30px;
+        padding-left: 27px;
+    }
+}
