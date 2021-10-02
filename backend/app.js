@@ -11,6 +11,7 @@ const { errors } = require('./middlewares/errors');
 const NotFound = require('./errors/NotFound');
 const { validateSigIn, validateSigUp } = require('./middlewares/Validation');
 const { limiter } = require('./api/api');
+const { reqLogger, errLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
+app.use(reqLogger);
+
 app.post('/signin', limiter, validateSigIn, login);
 app.post('/signup', limiter, validateSigUp, createUser);
 
@@ -36,6 +39,9 @@ app.use(routerCard);
 app.use(() => {
   throw new NotFound('Страницы не существует');
 });
+
+app.use(errLogger);
+
 app.use(errors);
 
 app.listen(PORT, () => {
