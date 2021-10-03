@@ -1,52 +1,91 @@
-import React from "react"
-import PopupWithForm from './PopupWithForm.js'
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function EditProfilePopup(props) {
-    const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
-    React.useEffect(() => {
-        setName(currentUser.name);
-        setDescription(currentUser.about);
-    }, [currentUser, props.isOpen]);
+  React.useEffect(() => {
+    setNewName(currentUser.name);
+    setNewDescription(currentUser.about);
+  }, [currentUser, props.isOpen]);
 
-    const [name, setName] = React.useState("");
-    const [description, setDescription] = React.useState("");
+  const [name, setNewName] = React.useState("");
+  const [description, setNewDescription] = React.useState("");
 
-    const handleChangeName = (evt) => {
-        setName(evt.target.value);
-      };
-    
-      const handleChangeDescription = (evt) => {
-        setDescription(evt.target.value);
-      };
-    
-      function handleSubmit(evt) {
-        evt.preventDefault();
-        props.onUpdateUser({
-          name: name,
-          about: description,
-        });
-      }
+  const handleChangeName = (e) => {
+    setNewName(e.target.value);
+  };
 
-    return (
-        <PopupWithForm
-            isOpen={props.isOpen}
-            onClose={props.onClose}
-            onSubmit={handleSubmit}
-            name="edit-profile"
-            title="Редактировать профиль"
-            buttonText="Сохранить"
-        >
-            <input onChange={handleChangeName} type="text" name="name" id="nameInput" value={name || ''} placeholder="Имя"
-                className="popup__input popup__input_name" minLength={2} maxLength={40} required />
-            <span className="nameInput-error popup__error"></span>
-            <input onChange={handleChangeDescription} type="text" name="about" id="jobInput" value={description || ''}
-                placeholder="Вид деятельности" className="popup__input popup__input_job" minLength={2}
-                maxLength={200} required />
-            <span className="jobInput-error popup__error"></span>
-        </PopupWithForm>
-    );
+  const handleChangeDescription = (e) => {
+    setNewDescription(e.target.value);
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    props.onUpdateUser({
+      name: name,
+      about: description,
+    });
+  }
+
+  function onClose() {
+    props.onClose();
+    resetInputPopupAdd();
+  }
+
+  function resetInputPopupAdd() {
+    setNewName(currentUser.name);
+    setNewDescription(currentUser.about);
+  }
+
+  return (
+    <PopupWithForm
+      name="edit-profile"
+      title="Редактировать профиль"
+      isOpen={props.isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+    >
+      <div>
+        <div className="popup__input-form">
+          <input
+            placeholder="Имя"
+            id="name-input"
+            className="popup__input popup__input_type_name"
+            value={name || ''}
+            name="firstname"
+            required
+            minLength={2}
+            maxLength={40}
+            autoComplete="off"
+            onChange={handleChangeName}
+          />
+          <span
+            className="popup__input-error input-error"
+            id="name-input-error"
+          />
+        </div>
+        <div className="popup__input-form">
+          <input
+            placeholder="Профессия"
+            id="description-input"
+            className="popup__input popup__input_type_title"
+            value={description || ''}
+            name="lastname"
+            required
+            minLength={2}
+            maxLength={200}
+            onChange={handleChangeDescription}
+          />
+          <span
+            className="popup__input-error input-error"
+            id="description-input-error"
+          />
+        </div>
+      </div>
+    </PopupWithForm>
+  );
 }
 
 export default EditProfilePopup;

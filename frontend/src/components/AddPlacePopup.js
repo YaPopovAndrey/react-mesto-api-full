@@ -1,54 +1,77 @@
-import React from "react"
-import PopupWithForm from './PopupWithForm.js'
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
-    const [newPlaceName, setNewPlaceName] = React.useState("");
-    const [newPlaceLink, setNewPlaceLink] = React.useState("");
-  
-    const handlePlaceName = (evt) => {
-      setNewPlaceName(evt.target.value);
-    };
-  
-    const handlePlaceLink = (evt) => {
-      setNewPlaceLink(evt.target.value);
-    };
-  
-    function handleAddPlaceSubmit(evt) {
-      evt.preventDefault();
-      props.setNewCard({
-        name: newPlaceName,
-        link: newPlaceLink,
-      });
-      resetInputPopupAdd();
-    }
-  
-    function resetInputPopupAdd() {
-      setNewPlaceName("");
-      setNewPlaceLink("");
-    }
-  
-    function onClose() {
-      props.onClose();
-      resetInputPopupAdd();
-    }
+  const [newPlaceName, setNewPlaceName] = React.useState("");
+  const [newPlaceLink, setNewPlaceLink] = React.useState("");
 
-    return (
-        <PopupWithForm
-            isOpen={props.isOpen}
-            onClose={onClose}
-            onSubmit={handleAddPlaceSubmit}
-            name="popup_add"
-            title="Новое место"
-            buttonText="Создать"
-        >
-            <input onChange={handlePlaceName} type="text" name="name" id="titleInput" value={newPlaceName} placeholder="Название"
-                className="popup__input popup__input_title" minLength={2} maxLength={30} required />
-            <span className="titleInput-error popup__error"></span>
-            <input onChange={handlePlaceLink} type="url" name="link" id="urlInput" value={newPlaceLink} placeholder="Ссылка на картинку"
-                className="popup__input popup__input_link" required />
-            <span className="urlInput-error popup__error"></span>
-        </PopupWithForm>
-    );
+  const handlePlaceName = (e) => {
+    setNewPlaceName(e.target.value);
+  };
+
+  const handlePlaceLink = (e) => {
+    setNewPlaceLink(e.target.value);
+  };
+
+  function handleAddPlaceSubmit(e) {
+    e.preventDefault();
+    props.setNewCard({
+      name: newPlaceName,
+      link: newPlaceLink,
+    });
+    resetInputPopupAdd();
+  }
+
+  function resetInputPopupAdd() {
+    setNewPlaceName("");
+    setNewPlaceLink("");
+  }
+
+  function onClose() {
+    props.onClose();
+    resetInputPopupAdd();
+  }
+
+  return (
+    <PopupWithForm
+      name="place_add"
+      title="Новое место"
+      isOpen={props.isOpen}
+      onClose={onClose}
+      onSubmit={handleAddPlaceSubmit}
+    >
+      <div className="popup__input-form">
+        <input
+          placeholder="Название"
+          id="title-input"
+          className="popup__input popup__input_type_name-add"
+          name="mesto"
+          required
+          value={newPlaceName}
+          minLength={2}
+          maxLength={30}
+          onChange={handlePlaceName}
+        />
+        <span
+          className="popup__input-error input-error"
+          id="title-input-error"
+        />
+      </div>
+      <div className="popup__input-form">
+        <input
+          placeholder="Ссылка на картинку"
+          id="url-input"
+          className="popup__input popup__input_type_photo-add"
+          name="photo"
+          type="url"
+          value={newPlaceLink}
+          required
+          onChange={handlePlaceLink}
+        />
+        <span className="popup__input-error input-error" id="url-input-error" />
+      </div>
+    </PopupWithForm>
+  );
 }
 
 export default AddPlacePopup;

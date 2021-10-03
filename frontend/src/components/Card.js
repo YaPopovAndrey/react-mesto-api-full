@@ -1,48 +1,62 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Card(card) {
-    const currentUser = React.useContext(CurrentUserContext);
+function Card(props) {
+  const currentUser = React.useContext(CurrentUserContext);
 
-    const isOwn = card.data.owner._id === currentUser._id;
+  const isOwn = props.card.owner._id === currentUser._id;
 
-    const cardDeleteButtonClassName = (
-        `elements__delete ${isOwn ? 'elements__delete_visible' : 'elements__delete_hidden'}`
-    );
+  const cardDeleteButtonClassName = `grid__delete ${
+    isOwn && "grid__delete_opened"
+  }`;
 
-    const isLiked = card.data.likes.some(i => i._id === currentUser._id);
+  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+  const cardLikeButtonClassName = `grid__like-button ${
+    isLiked && "grid__button_active"
+  }`;
 
-    const cardLikeButtonClassName = (
-        `elements__like ${isLiked && 'elements__like_active'}`
-    );
+  function handleClick() {
+    props.onCardClick({
+      link: props.card.link,
+      name: props.card.name,
+    });
+  }
 
-    const handleClick = () => {
-        card.onCardClick(card.data);
-    }
+  function handleLikeClick() {
+    props.onCardLike(props.card);
+  }
 
-    const handleLikeClick = () => {
-        card.onCardLike(card);
-    }
+  function handleDeleteClick() {
+    props.onCardDelete(props.card);
+  }
 
-    const handleDeleteClick = () => {
-        card.onCardDelete(card);
-    }
-
-    return (
-        <li className="template__card card">
-            <div className="elements__element">
-                <button onClick={handleDeleteClick} type="button" className={cardDeleteButtonClassName}></button>
-                <img onClick={handleClick} src={card.link} alt={card.name} className="elements__image" />
-                <div className="elements__title">
-                    <h2 className="elements__caption">{card.name}</h2>
-                    <div className="elements__like-box">
-                        <button onClick={handleLikeClick} type="button" className={cardLikeButtonClassName}></button>
-                        <span className="elements__like-count">{card.likes}</span>
-                    </div>
-                </div>
-            </div>
-        </li>
-    );
+  return (
+    <div className="grid__element">
+      <button
+        className={cardDeleteButtonClassName}
+        aria-label="delete"
+        type="button"
+        onClick={handleDeleteClick}
+      />
+      <img
+        className="grid__photo"
+        src={props.card.link}
+        onClick={handleClick}
+      />
+      <div className="grid__info">
+        <h2 className="grid__name">{props.card.name}</h2>
+        <div className="gride__like-container">
+          <button
+            type="button"
+            className={cardLikeButtonClassName}
+            aria-label="like"
+            onClick={handleLikeClick}
+          />
+          <p className="grid__like-kolvo">{props.card.likes.length}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Card;
