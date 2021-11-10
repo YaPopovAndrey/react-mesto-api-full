@@ -12,9 +12,9 @@
 
 Готовое веб-приложение. Для просмотра перейдите по ссылкам ниже.
 
-[Frontend](https://yapopovandrey.nomoredomains.monster)
+[Frontend](https://yapopovandrey.nomoredomains.club)
 
-[Backend](https://yapopovandrey.nomoredomains.club)
+[Backend](https://yapopovandrey.nomoredomains.monster)
 
 Публичный IP: 62.84.113.9
 
