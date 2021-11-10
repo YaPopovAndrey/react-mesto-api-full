@@ -1,43 +1,25 @@
-import React from "react";
-import logo from "../images/logo-header.svg";
-import { Route, Switch, Link } from "react-router-dom";
-import { DataUserContext } from "../contexts/CurrentUserContext";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { NavLink } from "react-router-dom";
+import logoPath from '../images/logo.png';
 
-function Header() {
-  const dataUser = React.useContext(DataUserContext);
-  const history = useHistory();
-
-  function signOut() {
-    localStorage.removeItem("token");
-    history.push("/sign-in");
-  }
-
+function Header(props) {
   return (
     <header className="header">
-      <img alt="логотип" src={logo} className="header__logo" />
-      <Switch>
-        <Route path="/sign-up">
-          <Link to="/sign-in" className="header__link">
-            Войти
-          </Link>
-        </Route>
-        <Route path="/sign-in">
-          <Link to="/sign-up" className="header__link">
-            Зарегистрироваться
-          </Link>
-        </Route>
-        <Route exact path="/">
-          <div className="header__container">
-            <p className="header__link">{dataUser.email}</p>
-            <button className="header__button" onClick={signOut}>
-              Выйти
-            </button>
-          </div>
-        </Route>
-      </Switch>
+      <img src={logoPath} alt="Логотип сайта Место" className="header__logo" />
+      <nav className="header__menu">
+        {props.loggedIn ?
+          <>
+            <p className="header__email">{props.email}</p>
+            <NavLink to="/signin" className="header__link header__link_logged" onClick={props.onSignOut} >Выйти</NavLink>
+          </>
+          :
+          <>
+            <NavLink to="/signup" className="header__link" activeStyle={{ display: 'none' }} >Регистрация</NavLink>
+            <NavLink to="/signin" className="header__link" activeStyle={{ display: 'none' }}>Войти</NavLink>
+          </>}
+      </nav>
     </header>
-  );
+  )
 }
 
 export default Header;

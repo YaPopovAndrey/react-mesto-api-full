@@ -1,58 +1,59 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Register(props) {
-  const handleUserEmail = (e) => {
-    props.setUserEmail(e.target.value);
-  };
 
-  const handleUserPassword = (e) => {
-    props.setUserPassword(e.target.value);
-  };
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    props.onRegister(email, password);
+  }
 
   return (
-    <div className="login">
-      <h1 className="login__title">Регистрация</h1>
-      <form className="login__form" onSubmit={props.onRegister}>
-        <div>
+    <div className="authorization">
+      <h2 className="authorization__title">
+        Регистрация
+      </h2>
+      <form onSubmit={handleSubmit}>
+        <fieldset className="authorization__fieldset">
           <input
-            placeholder="Email"
-            id="email-input"
-            className="login__input"
+            className="authorization__input"
+            id="email"
             name="email"
-            value={props.userEmail}
-            required
-            minLength={2}
-            maxLength={50}
-            autoComplete="on"
-            onChange={handleUserEmail}
             type="email"
+            onChange={handleChangeEmail}
+            value={email}
+            placeholder="Email"
           />
+
           <input
-            placeholder="Пароль"
-            id="password-input"
-            className="login__input"
-            name="code"
-            value={props.userPassword}
-            required
-            minLength={2}
-            maxLength={50}
-            onChange={handleUserPassword}
+            className="authorization__input"
+            id="password"
+            name="password"
             type="password"
+            onChange={handleChangePassword}
+            value={password}
+            placeholder="Пароль"
           />
-        </div>
-        <div>
-          <button type="submit" className="login__save">
-            Зарегистрироваться
-          </button>
-          <p className="login__text">
-            Уже зарегистрированы?{" "}
-            <Link to="/sign-in" className="login__link">
-              Войти
-            </Link>
-          </p>
-        </div>
+
+          <button type="submit" className="authorization__button">Зарегистрироваться</button>
+        </fieldset>
       </form>
+
+      <div className="authorization__menu-link">
+        <span>Уже зарегистрированы? </span><Link to="/signin" className="authorization__link">Войти</Link>
+      </div>
     </div>
   );
 }

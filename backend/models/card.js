@@ -1,35 +1,40 @@
-/* eslint-disable linebreak-style */
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const cardShema = new mongoose.Schema({
+const cardSchema = new mongoose.Schema({
   name: {
-    required: true,
     type: String,
+    required: true,
     minlength: 2,
     maxlength: 30,
   },
   link: {
-    required: true,
     type: String,
     validate: {
-      validator: (v) => validator.isURL(v),
-      message: 'Ссылка невалидна',
+      validator(v) {
+        validator.isURL(v, { require_protocol: true });
+        // eslint-disable-next-line no-useless-escape
+        return /((http|https):\/\/)(www\.)?([A-Za-z0-9-._~:\/?#[\]@!$&'()*+,;=])*/.test(v);
+      },
     },
+    required: true,
   },
   owner: {
-    required: true,
-    type: Object,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
+    required: true,
   },
   likes: [{
-    type: Object,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     default: [],
   }],
   createdAt: {
     type: Date,
     default: Date.now,
   },
-}, { versionKey: false });
+}, {
+  versionKey: false,
+});
 
-module.exports = mongoose.model('card', cardShema);
+module.exports = mongoose.model('card', cardSchema);

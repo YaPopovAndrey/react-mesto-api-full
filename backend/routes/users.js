@@ -1,19 +1,32 @@
-/* eslint-disable linebreak-style */
 const router = require('express').Router();
-const { limiter } = require('../api/api');
+const { celebrate, Joi } = require('celebrate');
+const { validation } = require('../middlewares/validator');
 
 const {
-  getUsers, getUser, updateUser, updateAvatar,
+  getUsers, getUser, getUserId, updateProfile, updateAvatar,
 } = require('../controllers/users');
 
-const {
-  validateUser,
-  validateAvatar,
-} = require('../middlewares/Validation');
+router.get('/', getUsers);
 
-router.get('/users', limiter, getUsers);
-router.get('/users/me', limiter, getUser);
-router.patch('/users/me', limiter, validateUser, updateUser);
-router.patch('/users/me/avatar', limiter, validateAvatar, updateAvatar);
+router.get('/me', getUser);
+
+router.get('/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().hex().length(24),
+  }),
+}), getUserId);
+
+router.patch('/me', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    about: Joi.string().min(2).max(30).required(),
+  }),
+}), updateProfile);
+
+router.patch('/me/avatar', celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().required().custom(validation),
+  }),
+}), updateAvatar);
 
 module.exports = router;

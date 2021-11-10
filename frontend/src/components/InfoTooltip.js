@@ -1,36 +1,21 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import imgOk from "../images/Union.svg";
-import imgError from "../images/UnionError.png";
+import React from 'react';
+import successPath from "../images/success.svg";
+import failPath from "../images/fail.svg";
 
 function InfoTooltip(props) {
-  const history = useHistory();
-  function closePopup() {
-    if (props.registrationStatus) {
-      props.onClose();
-      history.push("/sign-in");
-    } else {
-      props.onClose();
-    }
-  }
-
   return (
-    <div className={`popup ${props.isOpen && "popup_opened"}`}>
-      <div className="popup__popup-close" onClick={closePopup} />
-      <div className="popup__content popup__content_place_info">
-        <img
-          src={props.registrationStatus ? imgOk : imgError}
-          className="popup__info-photo"
-        ></img>
-        <button type="button" className="popup__close" onClick={closePopup} />
-        <h3 className="popup__title popup__title_place_info">
-          {props.registrationStatus
+    <div className={`popup ${props.isOpen ? "popup_opened" : ""}`} >
+      <div className="popup__container">
+        <img src={props.isSuccess ? successPath : failPath} className="popup__infotooltip-image" alt="Иконка результата" />
+        <h2 className="popup__infotooltip-title">
+          {props.isSuccess
             ? "Вы успешно зарегистрировались!"
             : "Что-то пошло не так! Попробуйте ещё раз."}
-        </h3>
+        </h2>
+        <button type="button" className="popup__close-button" onClick={props.onClose} />
       </div>
     </div>
-  );
+  )
 }
 
 export default InfoTooltip;

@@ -1,24 +1,17 @@
-import React from "react";
+import React from 'react';
 
 function ImagePopup(props) {
   return (
-    <div className={`popup popup_place_photo ${props.card && "popup_opened"}`}>
-      <div className="popup__popup-close" onClick={props.onClose} />
-      <div className="popup__photo-container">
-        <img
-          className="popup__photo"
-          alt={props.card && props.card.name}
-          src={props.card && props.card.link}
-        />
-        <h2 className="popup__name-photo">{props.card && props.card.name}</h2>
-        <button
-          type="button"
-          className="popup__close popup__close_place_photo"
-          onClick={props.onClose}
-        />
+    <div className={`popup popup-card ${props.card ? "popup_opened" : ""}`}>
+      <div className="popup__container popup__container_card">
+        <button type="button" className="popup__close-button" onClick={props.onClose} />
+        <figure className="popup__figure">
+          <img src={props.card?.link} alt={props.card?.name} className="popup__image" />
+          <figcaption className="popup__caption">{props.card?.name}</figcaption>
+        </figure>
       </div>
     </div>
-  );
+  )
 }
 
 export default ImagePopup;

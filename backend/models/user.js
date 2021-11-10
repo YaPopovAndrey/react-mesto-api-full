@@ -1,28 +1,8 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable func-names */
-/* eslint-disable import/no-unresolved */
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const validator = require('validator');
-const isEmail = require('validator/lib/isEmail');
-const Unauthorized = require('../errors/Unauthorized');
 
-const userShema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator: (email) => isEmail(email),
-      message: 'Неверно введен email',
-    },
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8,
-    select: false,
-  },
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 2,
@@ -37,25 +17,55 @@ const userShema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    required: true,
     validate: {
-      validator: (v) => validator.isURL(v),
-      message: 'Введите корректную ссылку',
+      validator(v) {
+        validator.isURL(v, { require_protocol: true });
+        // eslint-disable-next-line no-useless-escape
+        return /((http|https):\/\/)(www\.)?([A-Za-z0-9-._~:\/?#[\]@!$&'()*+,;=])*/.test(v);
+      },
+    },
+    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    validate: {
+      validator(v) {
+        return validator.isEmail(v);
+      },
     },
   },
-}, { versionKey: false });
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
+}, {
+  versionKey: false,
+});
 
-userShema.statics.findUserByCredentials = function (email, password) {
+function toJSON() {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+}
+
+userSchema.methods.toJSON = toJSON;
+
+// eslint-disable-next-line func-names
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Unauthorized('Ошибка! Неверно введен email или пароль!'));
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Unauthorized('Ошибка! Неверно введен email или пароль!'));
+            return Promise.reject(new Error('Неправильные почта или пароль'));
           }
 
           return user;
@@ -63,4 +73,4 @@ userShema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-module.exports = mongoose.model('user', userShema);
+module.exports = mongoose.model('user', userSchema);

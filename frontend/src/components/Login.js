@@ -1,50 +1,53 @@
-import React from "react";
+import React from 'react';
 
 function Login(props) {
-  const handleUserEmail = (e) => {
-    props.setUserEmail(e.target.value);
-  };
 
-  const handleUserPassword = (e) => {
-    props.setUserPassword(e.target.value);
-  };
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    props.onLogin(email, password);
+  }
 
   return (
-    <div className="login">
-      <h1 className="login__title">Вход</h1>
-      <form className="login__form" onSubmit={props.onLogin}>
-        <div>
+    <div className="authorization">
+      <h2 className="authorization__title">
+        Вход
+      </h2>
+      <form onSubmit={handleSubmit}>
+        <fieldset className="authorization__fieldset">
           <input
-            placeholder="Email"
-            id="name-input"
-            className="login__input"
+            className="authorization__input"
+            id="email"
             name="email"
-            required
-            minLength={2}
-            maxLength={50}
-            autoComplete="on"
-            value={props.userEmail}
-            onChange={handleUserEmail}
             type="email"
+            onChange={handleChangeEmail}
+            value={email}
+            placeholder="Email"
           />
+
           <input
-            placeholder="Пароль"
-            id="description-input"
-            className="login__input"
-            name="code"
-            required
-            minLength={2}
-            maxLength={50}
-            value={props.userPassword}
-            onChange={handleUserPassword}
+            className="authorization__input"
+            id="password"
+            name="password"
             type="password"
+            onChange={handleChangePassword}
+            value={password}
+            placeholder="Пароль"
           />
-        </div>
-        <div>
-          <button type="submit" className="login__save">
-            Войти
-          </button>
-        </div>
+
+          <button type="submit" className="authorization__button">Войти</button>
+        </fieldset>
       </form>
     </div>
   );
